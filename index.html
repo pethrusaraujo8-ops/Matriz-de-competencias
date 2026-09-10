@@ -1,0 +1,1989 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Gerador de Matriz de Competências</title>
+
+    <style>
+
+        /* ================================= */
+        /* CONFIGURAÇÕES GERAIS */
+        /* ================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #18002c 0%,
+                    #310052 25%,
+                    #4e087a 50%,
+                    #7022a5 75%,
+                    #9344cc 100%
+                );
+
+            background-attachment: fixed;
+        }
+
+        .page {
+            width: 100%;
+            min-height: 100vh;
+            padding: 35px;
+        }
+
+
+
+        /* ================================= */
+        /* CABEÇALHO */
+        /* ================================= */
+
+        .topbar {
+            width: 100%;
+            max-width: 1200px;
+
+            margin:
+                0 auto 35px auto;
+
+            padding: 28px;
+
+            text-align: center;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.10
+                );
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.15
+                );
+
+            border-radius: 28px;
+
+            backdrop-filter: blur(10px);
+        }
+
+        .topbar h1 {
+            font-size: 34px;
+            margin-bottom: 10px;
+        }
+
+        .topbar p {
+            font-size: 15px;
+            color: #eeeeee;
+        }
+
+
+
+        /* ================================= */
+        /* PAINEL */
+        /* ================================= */
+
+        .control-panel {
+            width: 100%;
+            max-width: 1200px;
+
+            margin: auto;
+
+            padding: 30px;
+
+            border-radius: 28px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.10
+                );
+
+            backdrop-filter: blur(10px);
+        }
+
+        .control-panel h2 {
+            text-align: center;
+            margin-bottom: 22px;
+        }
+
+
+
+        /* ================================= */
+        /* CAIXA DOS CARDS */
+        /* ================================= */
+
+        .selectors-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .selectors-box {
+            display: inline-flex;
+
+            justify-content: center;
+            align-items: center;
+
+            flex-wrap: wrap;
+
+            gap: 22px;
+
+            padding: 22px 28px;
+
+            background: white;
+
+            border-radius: 40px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.22
+                );
+        }
+
+
+
+        /* ================================= */
+        /* SELETORES DOS CARDS */
+        /* ================================= */
+
+        .field {
+            display: flex;
+
+            flex-direction: column;
+            align-items: center;
+
+            gap: 8px;
+        }
+
+        .field label {
+            color: #591184;
+
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .field select {
+            width: 190px;
+            height: 48px;
+
+            padding: 0 18px;
+
+            border-radius: 30px;
+
+            border:
+                2px solid
+                #7624aa;
+
+            outline: none;
+
+            background: white;
+
+            color: #57117e;
+
+            font-weight: bold;
+            font-size: 15px;
+
+            text-align: center;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+        }
+
+        .field select:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 5px 14px
+                rgba(
+                    98,
+                    20,
+                    140,
+                    0.20
+                );
+        }
+
+
+
+        /* ================================= */
+        /* MENSAGEM */
+        /* ================================= */
+
+        .message {
+            min-height: 25px;
+
+            margin-top: 15px;
+
+            text-align: center;
+
+            color: #ffe188;
+
+            font-weight: bold;
+        }
+
+
+
+        /* ================================= */
+        /* EDITORES */
+        /* ================================= */
+
+        .levels-title {
+            margin-top: 18px;
+        }
+
+        .competency-editors {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    3,
+                    1fr
+                );
+
+            gap: 22px;
+
+            margin-top: 20px;
+        }
+
+        .editor-card {
+            padding: 22px;
+
+            border-radius: 25px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.11
+                );
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.14
+                );
+        }
+
+        .editor-card h3 {
+            text-align: center;
+
+            margin-bottom: 20px;
+
+            font-size: 24px;
+        }
+
+        .editor-row {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 7px;
+
+            margin-bottom: 15px;
+        }
+
+        .editor-row label {
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+
+
+        /* ================================= */
+        /* BOTÕES DE NÍVEL */
+        /* ================================= */
+
+        .editor-row select {
+            width: 100%;
+            height: 46px;
+
+            padding: 0 15px;
+
+            border: none;
+            outline: none;
+
+            border-radius: 25px;
+
+            background: white;
+
+            color: #591184;
+
+            font-weight: bold;
+
+            /* FONTE DOS NÍVEIS AUMENTADA */
+            font-size: 17px;
+
+            cursor: pointer;
+        }
+
+
+
+        /* ================================= */
+        /* CAIXA DOS BOTÕES PRINCIPAIS */
+        /* ================================= */
+
+        .actions-container {
+            display: flex;
+
+            justify-content: center;
+
+            margin-top: 35px;
+        }
+
+        .buttons-box {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            gap: 12px;
+
+            flex-wrap: wrap;
+
+            padding: 10px;
+
+            background: white;
+
+            border-radius: 50px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.22
+                );
+        }
+
+
+
+        /* ================================= */
+        /* BOTÕES */
+        /* ================================= */
+
+        .btn {
+            min-width: 155px;
+            height: 48px;
+
+            padding: 0 22px;
+
+            border-radius: 30px;
+
+            border:
+                2px solid
+                #7b2cbf;
+
+            background: white;
+
+            color: #591184;
+
+            font-size: 14px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition:
+                all 0.2s ease;
+        }
+
+        .btn:hover {
+            background: #f0ddff;
+
+            transform:
+                translateY(-2px);
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-reset {
+            border-color: #b23a48;
+            color: #a22a39;
+        }
+
+        .btn-reset:hover {
+            background: #ffe8eb;
+        }
+
+
+
+        /* ================================= */
+        /* PRÉVIA */
+        /* ================================= */
+
+        .preview-title {
+            text-align: center;
+
+            margin:
+                45px 0 20px 0;
+        }
+
+        .preview-wrapper {
+            width: 100%;
+
+            overflow-x: auto;
+
+            padding-bottom: 40px;
+        }
+
+
+
+        /* ================================= */
+        /* ÁREA DA IMAGEM */
+        /* ================================= */
+
+        .matrix-canvas {
+            width: 1240px;
+            min-height: 700px;
+
+            margin: auto;
+
+            padding:
+                35px 35px 45px 35px;
+
+            position: relative;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #50078d 0%,
+                    #6414d8 48%,
+                    #24bccc 100%
+                );
+        }
+
+
+
+        /* ================================= */
+        /* TÍTULO DA MATRIZ */
+        /* ================================= */
+
+        .matrix-title-badge {
+            display: inline-flex;
+
+            align-items: center;
+
+            min-height: 92px;
+
+            padding:
+                15px 45px
+                15px 40px;
+
+            margin-bottom: 38px;
+
+            border-radius:
+                0 32px 32px 0;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #128cb7,
+                    #28abc9
+                );
+
+            position: relative;
+        }
+
+
+
+        /*
+        Usamos DIV ao invés de H2.
+        Isso torna a renderização no PNG
+        mais confiável.
+        */
+
+        .matrix-title-text {
+            display: block;
+
+            color: #ffffff;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            font-size: 55px;
+
+            line-height: 1.1;
+
+            font-weight: 900;
+
+            white-space: nowrap;
+
+            text-shadow:
+                3px 3px 0
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.40
+                );
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+
+        /* ================================= */
+        /* CARDS DA MATRIZ */
+        /* ================================= */
+
+        .matrix-cards {
+            display: flex;
+
+            justify-content: center;
+
+            align-items: stretch;
+
+            gap: 65px;
+        }
+
+        .matrix-card {
+            width: 290px;
+            min-height: 520px;
+
+            padding: 20px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(
+                    135,
+                    135,
+                    135,
+                    0.95
+                );
+
+            box-shadow:
+                0 9px 22px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.20
+                );
+        }
+
+        .matrix-card h3 {
+            font-size: 40px;
+
+            margin-bottom: 22px;
+
+            color: white;
+
+            font-weight: 900;
+
+            text-shadow:
+                3px 3px 0
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.40
+                );
+        }
+
+
+
+        /* ================================= */
+        /* COMPETÊNCIAS */
+        /* ================================= */
+
+        .competency-item {
+            margin-bottom: 25px;
+        }
+
+        .competency-name {
+            margin-bottom: 10px;
+
+            font-size: 22px;
+
+            line-height: 1.05;
+
+            color: white;
+
+            font-weight: 800;
+
+            text-shadow:
+                2px 2px 0
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.40
+                );
+        }
+
+
+
+        /* ================================= */
+        /* BARRAS */
+        /* ================================= */
+
+        .level-bar {
+            width: 100%;
+            height: 30px;
+
+            overflow: hidden;
+
+            border-radius: 50px;
+
+            background: #dedede;
+        }
+
+        .level-fill {
+            height: 100%;
+
+            display: flex;
+
+            align-items: center;
+
+            padding-left: 12px;
+
+            border-radius: 50px;
+
+            color: #1d1d1d;
+
+            font-size: 12px;
+
+            font-weight: 900;
+        }
+
+        .level-1 {
+            width: 40%;
+            background: #ff3838;
+        }
+
+        .level-2 {
+            width: 67%;
+            background: #f68d48;
+        }
+
+        .level-3 {
+            width: 100%;
+            background: #18c96e;
+        }
+
+
+
+        /* ================================= */
+        /* RESPONSIVIDADE */
+        /* ================================= */
+
+        @media (max-width: 1000px) {
+
+            .competency-editors {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 700px) {
+
+            .page {
+                padding: 15px;
+            }
+
+            .selectors-box {
+                flex-direction: column;
+
+                width: 100%;
+
+                border-radius: 30px;
+            }
+
+            .field {
+                width: 100%;
+            }
+
+            .field select {
+                width: 100%;
+            }
+
+            .buttons-box {
+                width: 100%;
+
+                flex-direction: column;
+
+                border-radius: 30px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="page">
+
+
+    <!-- CABEÇALHO -->
+
+    <header class="topbar">
+
+        <h1>
+            Gerador de Matriz de Competências
+        </h1>
+
+        <p>
+            Escolha três cards,
+            defina os níveis
+            e gere a matriz.
+        </p>
+
+    </header>
+
+
+
+    <section class="control-panel">
+
+
+        <h2>
+            Escolha os 3 Cards
+        </h2>
+
+
+
+        <!-- ================================= -->
+        <!-- SELEÇÃO DOS CARDS -->
+        <!-- ================================= -->
+
+        <div class="selectors-container">
+
+
+            <div class="selectors-box">
+
+
+                <!-- CARD 1 -->
+
+                <div class="field">
+
+                    <label for="card1">
+                        Card 1
+                    </label>
+
+                    <select id="card1">
+
+                        <option value="Geral">Geral</option>
+                        <option value="JFIN">JFIN</option>
+                        <option value="Projetos">Projetos</option>
+                        <option value="P&I">P&I</option>
+                        <option value="Comercial">Comercial</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Liga">Liga</option>
+                        <option value="GP">GP</option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- CARD 2 -->
+
+                <div class="field">
+
+                    <label for="card2">
+                        Card 2
+                    </label>
+
+                    <select id="card2">
+
+                        <option value="Geral">Geral</option>
+                        <option value="JFIN">JFIN</option>
+                        <option value="Projetos">Projetos</option>
+                        <option value="P&I">P&I</option>
+                        <option value="Comercial">Comercial</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Liga">Liga</option>
+                        <option value="GP">GP</option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- CARD 3 -->
+
+                <div class="field">
+
+                    <label for="card3">
+                        Card 3
+                    </label>
+
+                    <select id="card3">
+
+                        <option value="Geral">Geral</option>
+                        <option value="JFIN">JFIN</option>
+                        <option value="Projetos">Projetos</option>
+                        <option value="P&I">P&I</option>
+                        <option value="Comercial">Comercial</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Liga">Liga</option>
+                        <option value="GP">GP</option>
+
+                    </select>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <div
+            id="selectionMessage"
+            class="message">
+        </div>
+
+
+
+        <!-- ================================= -->
+        <!-- NÍVEIS -->
+        <!-- ================================= -->
+
+        <h2 class="levels-title">
+            Níveis das Competências
+        </h2>
+
+
+        <div
+            id="competencyEditors"
+            class="competency-editors">
+        </div>
+
+
+
+        <!-- ================================= -->
+        <!-- BOTÕES -->
+        <!-- ================================= -->
+
+        <div class="actions-container">
+
+
+            <div class="buttons-box">
+
+
+                <button
+                    id="renderBtn"
+                    class="btn">
+
+                    Atualizar Prévia
+
+                </button>
+
+
+                <button
+                    id="downloadBtn"
+                    class="btn">
+
+                    Baixar PNG
+
+                </button>
+
+
+                <button
+                    id="resetBtn"
+                    class="btn btn-reset">
+
+                    Resetar
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ================================= -->
+    <!-- PRÉVIA -->
+    <!-- ================================= -->
+
+    <h2 class="preview-title">
+        Prévia
+    </h2>
+
+
+    <section class="preview-wrapper">
+
+
+        <div
+            id="exportArea"
+            class="matrix-canvas">
+
+
+            <!--
+            O título agora é uma DIV.
+            Isso evita o problema dele
+            desaparecer no PNG.
+            -->
+
+            <div class="matrix-title-badge">
+
+                <div class="matrix-title-text">
+                    Matriz de Competências
+                </div>
+
+            </div>
+
+
+            <div
+                id="matrixCards"
+                class="matrix-cards">
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+</div>
+
+
+
+<!-- ================================= -->
+<!-- HTML2CANVAS -->
+<!-- ================================= -->
+
+<script
+src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
+</script>
+
+
+
+<script>
+
+
+    /* ================================= */
+    /* CARDS */
+    /* ================================= */
+
+    const cardsData = {
+
+        "Geral": [
+            "Proatividade e Engajamento",
+            "Trabalho em Equipe",
+            "Organização e Gestão do Tempo",
+            "Comunicação"
+        ],
+
+        "JFIN": [
+            "Google Sheets",
+            "Google Docs",
+            "Conhecimento Financeiro",
+            "Prudência"
+        ],
+
+        "Projetos": [
+            "Melhoria de Processos",
+            "Pensamento Crítico",
+            "Capacidade Analítica"
+        ],
+
+        "P&I": [
+            "Notion",
+            "Google Sheets/Excel",
+            "Pesquisa Estruturada"
+        ],
+
+        "Comercial": [
+            "Oratória",
+            "Escuta Ativa",
+            "Técnicas de Venda",
+            "Domínio do Portfólio",
+            "Diagnóstico"
+        ],
+
+        "Marketing": [
+            "Criatividade",
+            "Senso Estético",
+            "Atualização de Tendências",
+            "Análise de Métricas",
+            "Capacidade de Adaptação"
+        ],
+
+        "Liga": [
+            "Ética",
+            "Empatia",
+            "Consciência Social",
+            "Flexibilidade"
+        ],
+
+        "GP": [
+            "Criatividade",
+            "Empatia",
+            "Inteligência Emocional",
+            "Pensamento Crítico"
+        ]
+
+    };
+
+
+
+    /* ================================= */
+    /* ESTADO */
+    /* ================================= */
+
+    let selectedCards = [
+        "Geral",
+        "GP",
+        "JFIN"
+    ];
+
+
+    let levelsState = {};
+
+
+
+    /* ================================= */
+    /* ELEMENTOS */
+    /* ================================= */
+
+    const card1 =
+        document.getElementById(
+            "card1"
+        );
+
+
+    const card2 =
+        document.getElementById(
+            "card2"
+        );
+
+
+    const card3 =
+        document.getElementById(
+            "card3"
+        );
+
+
+    const competencyEditors =
+        document.getElementById(
+            "competencyEditors"
+        );
+
+
+    const matrixCards =
+        document.getElementById(
+            "matrixCards"
+        );
+
+
+    const selectionMessage =
+        document.getElementById(
+            "selectionMessage"
+        );
+
+
+    const renderBtn =
+        document.getElementById(
+            "renderBtn"
+        );
+
+
+    const downloadBtn =
+        document.getElementById(
+            "downloadBtn"
+        );
+
+
+    const resetBtn =
+        document.getElementById(
+            "resetBtn"
+        );
+
+
+
+    /* ================================= */
+    /* INICIALIZAR NÍVEIS */
+    /* ================================= */
+
+    function initializeLevels() {
+
+        levelsState = {};
+
+
+        Object.keys(
+            cardsData
+        ).forEach(
+
+            function(cardName) {
+
+
+                levelsState[
+                    cardName
+                ] = {};
+
+
+                cardsData[
+                    cardName
+                ].forEach(
+
+                    function(competency) {
+
+
+                        levelsState[
+                            cardName
+                        ][
+                            competency
+                        ] = 1;
+
+                    }
+
+                );
+
+            }
+
+        );
+
+    }
+
+
+
+    /* ================================= */
+    /* VALIDAR 3 CARDS */
+    /* ================================= */
+
+    function validateSelections() {
+
+
+        const values = [
+
+            card1.value,
+
+            card2.value,
+
+            card3.value
+
+        ];
+
+
+        const unique =
+            new Set(values);
+
+
+        if (
+            unique.size !== 3
+        ) {
+
+
+            selectionMessage.textContent =
+                "Escolha 3 cards diferentes.";
+
+
+            return false;
+
+        }
+
+
+        selectionMessage.textContent =
+            "";
+
+
+        selectedCards =
+            values;
+
+
+        return true;
+
+    }
+
+
+
+    /* ================================= */
+    /* CRIAR EDITORES */
+    /* ================================= */
+
+    function createEditors() {
+
+
+        competencyEditors.innerHTML =
+            "";
+
+
+        selectedCards.forEach(
+
+            function(cardName) {
+
+
+                const editorCard =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                editorCard.className =
+                    "editor-card";
+
+
+
+                const title =
+                    document.createElement(
+                        "h3"
+                    );
+
+
+                title.textContent =
+                    cardName;
+
+
+                editorCard.appendChild(
+                    title
+                );
+
+
+
+                cardsData[
+                    cardName
+                ].forEach(
+
+                    function(competency) {
+
+
+                        const row =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        row.className =
+                            "editor-row";
+
+
+
+                        const label =
+                            document.createElement(
+                                "label"
+                            );
+
+
+                        label.textContent =
+                            competency;
+
+
+
+                        const select =
+                            document.createElement(
+                                "select"
+                            );
+
+
+
+                        for (
+                            let level = 1;
+                            level <= 3;
+                            level++
+                        ) {
+
+
+                            const option =
+                                document.createElement(
+                                    "option"
+                                );
+
+
+                            option.value =
+                                level;
+
+
+                            option.textContent =
+                                "Nível " + level;
+
+
+
+                            if (
+
+                                levelsState[
+                                    cardName
+                                ][
+                                    competency
+                                ]
+
+                                ===
+
+                                level
+
+                            ) {
+
+
+                                option.selected =
+                                    true;
+
+                            }
+
+
+                            select.appendChild(
+                                option
+                            );
+
+                        }
+
+
+
+                        select.addEventListener(
+
+                            "change",
+
+                            function() {
+
+
+                                levelsState[
+                                    cardName
+                                ][
+                                    competency
+                                ] =
+                                    Number(
+                                        select.value
+                                    );
+
+
+                                renderMatrix();
+
+                            }
+
+                        );
+
+
+
+                        row.appendChild(
+                            label
+                        );
+
+
+                        row.appendChild(
+                            select
+                        );
+
+
+                        editorCard.appendChild(
+                            row
+                        );
+
+                    }
+
+                );
+
+
+
+                competencyEditors.appendChild(
+                    editorCard
+                );
+
+            }
+
+        );
+
+    }
+
+
+
+    /* ================================= */
+    /* RENDERIZAR MATRIZ */
+    /* ================================= */
+
+    function renderMatrix() {
+
+
+        if (
+            !validateSelections()
+        ) {
+
+            return;
+
+        }
+
+
+        matrixCards.innerHTML =
+            "";
+
+
+
+        selectedCards.forEach(
+
+            function(cardName) {
+
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                card.className =
+                    "matrix-card";
+
+
+
+                const title =
+                    document.createElement(
+                        "h3"
+                    );
+
+
+                title.textContent =
+                    cardName;
+
+
+                card.appendChild(
+                    title
+                );
+
+
+
+                cardsData[
+                    cardName
+                ].forEach(
+
+                    function(competency) {
+
+
+                        const level =
+                            levelsState[
+                                cardName
+                            ][
+                                competency
+                            ];
+
+
+
+                        const item =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        item.className =
+                            "competency-item";
+
+
+
+                        const name =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        name.className =
+                            "competency-name";
+
+
+                        name.textContent =
+                            competency;
+
+
+
+                        const bar =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        bar.className =
+                            "level-bar";
+
+
+
+                        const fill =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        fill.className =
+                            "level-fill level-" +
+                            level;
+
+
+                        fill.textContent =
+                            "Nível " + level;
+
+
+
+                        bar.appendChild(
+                            fill
+                        );
+
+
+                        item.appendChild(
+                            name
+                        );
+
+
+                        item.appendChild(
+                            bar
+                        );
+
+
+                        card.appendChild(
+                            item
+                        );
+
+                    }
+
+                );
+
+
+
+                matrixCards.appendChild(
+                    card
+                );
+
+            }
+
+        );
+
+    }
+
+
+
+    /* ================================= */
+    /* ALTERAÇÃO DOS CARDS */
+    /* ================================= */
+
+    function cardsChanged() {
+
+
+        if (
+            validateSelections()
+        ) {
+
+
+            createEditors();
+
+
+            renderMatrix();
+
+        }
+
+    }
+
+
+
+    /* ================================= */
+    /* RESET */
+    /* ================================= */
+
+    function resetEverything() {
+
+
+        card1.value =
+            "Geral";
+
+
+        card2.value =
+            "GP";
+
+
+        card3.value =
+            "JFIN";
+
+
+
+        selectedCards = [
+
+            "Geral",
+
+            "GP",
+
+            "JFIN"
+
+        ];
+
+
+
+        initializeLevels();
+
+
+        selectionMessage.textContent =
+            "";
+
+
+        createEditors();
+
+
+        renderMatrix();
+
+    }
+
+
+
+    /* ================================= */
+    /* ESPERAR RENDERIZAÇÃO */
+    /* ================================= */
+
+    function waitForRender() {
+
+        return new Promise(
+
+            resolve => {
+
+                requestAnimationFrame(
+
+                    () => {
+
+                        requestAnimationFrame(
+                            resolve
+                        );
+
+                    }
+
+                );
+
+            }
+
+        );
+
+    }
+
+
+
+    /* ================================= */
+    /* DOWNLOAD */
+    /* ================================= */
+
+    async function downloadImage() {
+
+
+        if (
+            !validateSelections()
+        ) {
+
+            return;
+
+        }
+
+
+        /*
+        Atualiza a matriz antes
+        de gerar o arquivo.
+        */
+
+        renderMatrix();
+
+
+
+        /*
+        Aguarda fontes carregarem.
+        */
+
+        if (
+            document.fonts &&
+            document.fonts.ready
+        ) {
+
+            await document.fonts.ready;
+
+        }
+
+
+
+        /*
+        Aguarda o navegador terminar
+        de desenhar a página.
+        */
+
+        await waitForRender();
+
+
+
+        const exportArea =
+            document.getElementById(
+                "exportArea"
+            );
+
+
+
+        try {
+
+
+            const canvas =
+                await html2canvas(
+
+                    exportArea,
+
+                    {
+
+                        scale: 2,
+
+                        useCORS: true,
+
+                        allowTaint: true,
+
+                        backgroundColor: null,
+
+                        logging: false,
+
+                        scrollX:
+                            -window.scrollX,
+
+                        scrollY:
+                            -window.scrollY,
+
+                        width:
+                            exportArea.scrollWidth,
+
+                        height:
+                            exportArea.scrollHeight,
+
+                        windowWidth:
+                            exportArea.scrollWidth,
+
+                        windowHeight:
+                            exportArea.scrollHeight,
+
+                        onclone:
+                            function(clonedDocument) {
+
+
+                                /*
+                                Garantimos novamente
+                                que o título esteja
+                                visível no documento
+                                usado pelo html2canvas.
+                                */
+
+
+                                const clonedTitle =
+                                    clonedDocument.querySelector(
+                                        ".matrix-title-text"
+                                    );
+
+
+                                if (
+                                    clonedTitle
+                                ) {
+
+
+                                    clonedTitle.style.display =
+                                        "block";
+
+
+                                    clonedTitle.style.visibility =
+                                        "visible";
+
+
+                                    clonedTitle.style.opacity =
+                                        "1";
+
+
+                                    clonedTitle.style.color =
+                                        "#ffffff";
+
+
+                                    clonedTitle.style.fontSize =
+                                        "55px";
+
+
+                                    clonedTitle.style.fontWeight =
+                                        "900";
+
+
+                                    clonedTitle.textContent =
+                                        "Matriz de Competências";
+
+                                }
+
+
+                                const clonedBadge =
+                                    clonedDocument.querySelector(
+                                        ".matrix-title-badge"
+                                    );
+
+
+                                if (
+                                    clonedBadge
+                                ) {
+
+
+                                    clonedBadge.style.display =
+                                        "inline-flex";
+
+
+                                    clonedBadge.style.visibility =
+                                        "visible";
+
+
+                                    clonedBadge.style.opacity =
+                                        "1";
+
+                                }
+
+
+                            }
+
+                    }
+
+                );
+
+
+
+            const link =
+                document.createElement(
+                    "a"
+                );
+
+
+            link.download =
+                "matriz-de-competencias.png";
+
+
+            link.href =
+                canvas.toDataURL(
+                    "image/png",
+                    1.0
+                );
+
+
+            link.click();
+
+
+        }
+
+        catch(error) {
+
+
+            console.error(
+                "Erro ao gerar imagem:",
+                error
+            );
+
+
+            alert(
+                "Não foi possível gerar a imagem."
+            );
+
+        }
+
+    }
+
+
+
+    /* ================================= */
+    /* EVENTOS */
+    /* ================================= */
+
+    card1.addEventListener(
+        "change",
+        cardsChanged
+    );
+
+
+    card2.addEventListener(
+        "change",
+        cardsChanged
+    );
+
+
+    card3.addEventListener(
+        "change",
+        cardsChanged
+    );
+
+
+    renderBtn.addEventListener(
+        "click",
+        renderMatrix
+    );
+
+
+    resetBtn.addEventListener(
+        "click",
+        resetEverything
+    );
+
+
+    downloadBtn.addEventListener(
+        "click",
+        downloadImage
+    );
+
+
+
+    /* ================================= */
+    /* INÍCIO */
+    /* ================================= */
+
+    card1.value =
+        "Geral";
+
+
+    card2.value =
+        "GP";
+
+
+    card3.value =
+        "JFIN";
+
+
+    initializeLevels();
+
+
+    createEditors();
+
+
+    renderMatrix();
+
+
+</script>
+
+
+</body>
+
+</html>
