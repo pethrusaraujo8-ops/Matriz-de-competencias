@@ -145,7 +145,7 @@
         }
 
         .selectors-box {
-            display: inline-flex;
+            display: flex;
 
             justify-content: center;
             align-items: center;
@@ -153,6 +153,8 @@
             flex-wrap: wrap;
 
             gap: 22px;
+
+            max-width: 1050px;
 
             padding: 22px 28px;
 
@@ -235,6 +237,70 @@
 
 
 
+        /* CARD 4 COMEÇA ESCONDIDO */
+
+        #cardField4 {
+            display: none;
+        }
+
+
+
+        /* ================================= */
+        /* BOTÕES ADICIONAR / REMOVER CARD */
+        /* ================================= */
+
+        .card-actions {
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+
+            flex-wrap: wrap;
+
+            gap: 12px;
+
+            margin-top: 20px;
+        }
+
+        .card-action-btn {
+            min-width: 170px;
+
+            height: 46px;
+
+            padding: 0 20px;
+
+            border-radius: 30px;
+
+            border: 2px solid white;
+
+            background: white;
+
+            color: #591184;
+
+            font-size: 14px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+        }
+
+        .card-action-btn:hover {
+            background: #f0ddff;
+
+            transform: translateY(-2px);
+        }
+
+        #removeCardBtn {
+            display: none;
+
+            color: #a22a39;
+
+            border-color: #ffffff;
+        }
+
+
+
         /* ================================= */
         /* MENSAGEM */
         /* ================================= */
@@ -273,6 +339,14 @@
             gap: 22px;
 
             margin-top: 20px;
+        }
+
+        .competency-editors.four-editors {
+            grid-template-columns:
+                repeat(
+                    2,
+                    1fr
+                );
         }
 
         .editor-card {
@@ -324,7 +398,7 @@
 
 
         /* ================================= */
-        /* BOTÕES DE NÍVEL */
+        /* SELETORES DE NÍVEL */
         /* ================================= */
 
         .editor-row select {
@@ -344,7 +418,6 @@
 
             font-weight: bold;
 
-            /* FONTE DOS NÍVEIS AUMENTADA */
             font-size: 17px;
 
             cursor: pointer;
@@ -393,7 +466,7 @@
 
 
         /* ================================= */
-        /* BOTÕES */
+        /* BOTÕES PRINCIPAIS */
         /* ================================= */
 
         .btn {
@@ -486,6 +559,16 @@
                     #6414d8 48%,
                     #24bccc 100%
                 );
+
+            transition: width 0.3s ease;
+        }
+
+
+
+        /* QUANDO EXISTIREM 4 CARDS */
+
+        .matrix-canvas.four-cards-mode {
+            width: 1440px;
         }
 
 
@@ -519,14 +602,6 @@
 
             position: relative;
         }
-
-
-
-        /*
-        Usamos DIV ao invés de H2.
-        Isso torna a renderização no PNG
-        mais confiável.
-        */
 
         .matrix-title-text {
             display: block;
@@ -601,6 +676,20 @@
                     0.20
                 );
         }
+
+
+
+        /* AJUSTE PARA QUATRO CARDS */
+
+        .matrix-cards.four-cards {
+            gap: 30px;
+        }
+
+        .matrix-cards.four-cards .matrix-card {
+            width: 300px;
+        }
+
+
 
         .matrix-card h3 {
             font-size: 40px;
@@ -710,7 +799,8 @@
 
         @media (max-width: 1000px) {
 
-            .competency-editors {
+            .competency-editors,
+            .competency-editors.four-editors {
                 grid-template-columns: 1fr;
             }
 
@@ -750,6 +840,14 @@
                 width: 100%;
             }
 
+            .card-actions {
+                flex-direction: column;
+            }
+
+            .card-action-btn {
+                width: 100%;
+            }
+
         }
 
     </style>
@@ -763,7 +861,9 @@
 <div class="page">
 
 
+    <!-- ================================= -->
     <!-- CABEÇALHO -->
+    <!-- ================================= -->
 
     <header class="topbar">
 
@@ -772,7 +872,7 @@
         </h1>
 
         <p>
-            Escolha três cards,
+            Escolha os cards,
             defina os níveis
             e gere a matriz.
         </p>
@@ -785,7 +885,7 @@
 
 
         <h2>
-            Escolha os 3 Cards
+            Escolha os Cards
         </h2>
 
 
@@ -874,7 +974,60 @@
                 </div>
 
 
+
+                <!-- CARD 4 -->
+
+                <div
+                    class="field"
+                    id="cardField4"
+                >
+
+                    <label for="card4">
+                        Card 4
+                    </label>
+
+                    <select id="card4">
+
+                        <option value="Geral">Geral</option>
+                        <option value="JFIN">JFIN</option>
+                        <option value="Projetos">Projetos</option>
+                        <option value="P&I">P&I</option>
+                        <option value="Comercial">Comercial</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Liga">Liga</option>
+                        <option value="GP">GP</option>
+
+                    </select>
+
+                </div>
+
+
             </div>
+
+        </div>
+
+
+
+        <!-- ================================= -->
+        <!-- ADICIONAR / REMOVER CARD -->
+        <!-- ================================= -->
+
+        <div class="card-actions">
+
+            <button
+                id="addCardBtn"
+                class="card-action-btn"
+            >
+                + Adicionar Card
+            </button>
+
+
+            <button
+                id="removeCardBtn"
+                class="card-action-btn"
+            >
+                − Remover Card
+            </button>
 
         </div>
 
@@ -904,7 +1057,7 @@
 
 
         <!-- ================================= -->
-        <!-- BOTÕES -->
+        <!-- BOTÕES PRINCIPAIS -->
         <!-- ================================= -->
 
         <div class="actions-container">
@@ -967,12 +1120,6 @@
             class="matrix-canvas">
 
 
-            <!--
-            O título agora é uma DIV.
-            Isso evita o problema dele
-            desaparecer no PNG.
-            -->
-
             <div class="matrix-title-badge">
 
                 <div class="matrix-title-text">
@@ -1012,7 +1159,7 @@ src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
 
 
     /* ================================= */
-    /* CARDS */
+    /* DADOS DOS CARDS */
     /* ================================= */
 
     const cardsData = {
@@ -1091,27 +1238,45 @@ src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
     let levelsState = {};
 
 
+    /*
+    false = matriz com 3 cards
+    true = matriz com 4 cards
+    */
+
+    let fourthCardActive = false;
+
+
 
     /* ================================= */
     /* ELEMENTOS */
     /* ================================= */
 
     const card1 =
-        document.getElementById(
-            "card1"
-        );
+        document.getElementById("card1");
 
 
     const card2 =
-        document.getElementById(
-            "card2"
-        );
+        document.getElementById("card2");
 
 
     const card3 =
-        document.getElementById(
-            "card3"
-        );
+        document.getElementById("card3");
+
+
+    const card4 =
+        document.getElementById("card4");
+
+
+    const cardField4 =
+        document.getElementById("cardField4");
+
+
+    const addCardBtn =
+        document.getElementById("addCardBtn");
+
+
+    const removeCardBtn =
+        document.getElementById("removeCardBtn");
 
 
     const competencyEditors =
@@ -1147,6 +1312,12 @@ src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
     const resetBtn =
         document.getElementById(
             "resetBtn"
+        );
+
+
+    const exportArea =
+        document.getElementById(
+            "exportArea"
         );
 
 
@@ -1198,34 +1369,118 @@ src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
 
 
     /* ================================= */
-    /* VALIDAR 3 CARDS */
+    /* PEGAR CARDS ATIVOS */
     /* ================================= */
 
-    function validateSelections() {
+    function getActiveSelects() {
+
+        const activeSelects = [
+            card1,
+            card2,
+            card3
+        ];
 
 
-        const values = [
+        if (
+            fourthCardActive
+        ) {
+
+            activeSelects.push(
+                card4
+            );
+
+        }
+
+
+        return activeSelects;
+
+    }
+
+
+
+    /* ================================= */
+    /* PEGAR PRIMEIRO CARD DISPONÍVEL */
+    /* ================================= */
+
+    function getFirstAvailableCard() {
+
+
+        const alreadySelected = [
 
             card1.value,
-
             card2.value,
-
             card3.value
 
         ];
 
 
+        const cardNames =
+            Object.keys(
+                cardsData
+            );
+
+
+        for (
+            const cardName of cardNames
+        ) {
+
+
+            if (
+                !alreadySelected.includes(
+                    cardName
+                )
+            ) {
+
+                return cardName;
+
+            }
+
+        }
+
+
+        return cardNames[0];
+
+    }
+
+
+
+    /* ================================= */
+    /* VALIDAR SELEÇÕES */
+    /* ================================= */
+
+    function validateSelections() {
+
+
+        const activeSelects =
+            getActiveSelects();
+
+
+        const values =
+            activeSelects.map(
+
+                function(select) {
+
+                    return select.value;
+
+                }
+
+            );
+
+
         const unique =
-            new Set(values);
+            new Set(
+                values
+            );
 
 
         if (
-            unique.size !== 3
+            unique.size !==
+            values.length
         ) {
 
 
             selectionMessage.textContent =
-                "Escolha 3 cards diferentes.";
+                "Todos os cards selecionados precisam ser diferentes.";
 
 
             return false;
@@ -1256,6 +1511,25 @@ src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
 
         competencyEditors.innerHTML =
             "";
+
+
+        if (
+            fourthCardActive
+        ) {
+
+            competencyEditors.classList.add(
+                "four-editors"
+            );
+
+        }
+
+        else {
+
+            competencyEditors.classList.remove(
+                "four-editors"
+            );
+
+        }
 
 
         selectedCards.forEach(
@@ -1455,6 +1729,42 @@ src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
 
 
 
+        /*
+        AJUSTA VISUAL PARA 3 OU 4 CARDS
+        */
+
+        if (
+            fourthCardActive
+        ) {
+
+
+            matrixCards.classList.add(
+                "four-cards"
+            );
+
+
+            exportArea.classList.add(
+                "four-cards-mode"
+            );
+
+        }
+
+        else {
+
+
+            matrixCards.classList.remove(
+                "four-cards"
+            );
+
+
+            exportArea.classList.remove(
+                "four-cards-mode"
+            );
+
+        }
+
+
+
         selectedCards.forEach(
 
             function(cardName) {
@@ -1617,6 +1927,96 @@ src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
 
 
     /* ================================= */
+    /* ADICIONAR QUARTO CARD */
+    /* ================================= */
+
+    function addFourthCard() {
+
+
+        if (
+            fourthCardActive
+        ) {
+
+            return;
+
+        }
+
+
+        fourthCardActive =
+            true;
+
+
+        /*
+        ESCOLHE AUTOMATICAMENTE
+        UM CARD QUE AINDA NÃO
+        FOI SELECIONADO
+        */
+
+        card4.value =
+            getFirstAvailableCard();
+
+
+
+        cardField4.style.display =
+            "flex";
+
+
+        addCardBtn.style.display =
+            "none";
+
+
+        removeCardBtn.style.display =
+            "inline-block";
+
+
+        validateSelections();
+
+
+        createEditors();
+
+
+        renderMatrix();
+
+    }
+
+
+
+    /* ================================= */
+    /* REMOVER QUARTO CARD */
+    /* ================================= */
+
+    function removeFourthCard() {
+
+
+        fourthCardActive =
+            false;
+
+
+        cardField4.style.display =
+            "none";
+
+
+        addCardBtn.style.display =
+            "inline-block";
+
+
+        removeCardBtn.style.display =
+            "none";
+
+
+        validateSelections();
+
+
+        createEditors();
+
+
+        renderMatrix();
+
+    }
+
+
+
+    /* ================================= */
     /* RESET */
     /* ================================= */
 
@@ -1635,6 +2035,21 @@ src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
             "JFIN";
 
 
+        fourthCardActive =
+            false;
+
+
+        cardField4.style.display =
+            "none";
+
+
+        addCardBtn.style.display =
+            "inline-block";
+
+
+        removeCardBtn.style.display =
+            "none";
+
 
         selectedCards = [
 
@@ -1645,7 +2060,6 @@ src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
             "JFIN"
 
         ];
-
 
 
         initializeLevels();
@@ -1670,21 +2084,26 @@ src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
 
     function waitForRender() {
 
+
         return new Promise(
 
             resolve => {
+
 
                 requestAnimationFrame(
 
                     () => {
 
+
                         requestAnimationFrame(
                             resolve
                         );
 
+
                     }
 
                 );
+
 
             }
 
@@ -1710,17 +2129,12 @@ src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
         }
 
 
-        /*
-        Atualiza a matriz antes
-        de gerar o arquivo.
-        */
-
         renderMatrix();
 
 
 
         /*
-        Aguarda fontes carregarem.
+        ESPERA FONTES
         */
 
         if (
@@ -1735,18 +2149,11 @@ src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
 
 
         /*
-        Aguarda o navegador terminar
-        de desenhar a página.
+        ESPERA A TELA TERMINAR
+        DE RENDERIZAR
         */
 
         await waitForRender();
-
-
-
-        const exportArea =
-            document.getElementById(
-                "exportArea"
-            );
 
 
 
@@ -1788,22 +2195,25 @@ src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
                         windowHeight:
                             exportArea.scrollHeight,
 
+
+
+                        /*
+                        GARANTE QUE O TÍTULO
+                        CONTINUE APARECENDO
+                        NO PNG
+                        */
+
                         onclone:
-                            function(clonedDocument) {
-
-
-                                /*
-                                Garantimos novamente
-                                que o título esteja
-                                visível no documento
-                                usado pelo html2canvas.
-                                */
+                            function(
+                                clonedDocument
+                            ) {
 
 
                                 const clonedTitle =
-                                    clonedDocument.querySelector(
-                                        ".matrix-title-text"
-                                    );
+                                    clonedDocument
+                                        .querySelector(
+                                            ".matrix-title-text"
+                                        );
 
 
                                 if (
@@ -1841,10 +2251,12 @@ src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
                                 }
 
 
+
                                 const clonedBadge =
-                                    clonedDocument.querySelector(
-                                        ".matrix-title-badge"
-                                    );
+                                    clonedDocument
+                                        .querySelector(
+                                            ".matrix-title-badge"
+                                        );
 
 
                                 if (
@@ -1934,6 +2346,24 @@ src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
     card3.addEventListener(
         "change",
         cardsChanged
+    );
+
+
+    card4.addEventListener(
+        "change",
+        cardsChanged
+    );
+
+
+    addCardBtn.addEventListener(
+        "click",
+        addFourthCard
+    );
+
+
+    removeCardBtn.addEventListener(
+        "click",
+        removeFourthCard
     );
 
 
